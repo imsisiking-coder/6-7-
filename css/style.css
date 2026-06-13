@@ -54,11 +54,35 @@ body {
   gap: 18px;
 }
 
+.app-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .app-header h1 {
   margin: 0;
   font-family: "Black Han Sans", sans-serif;
   font-size: 2.2rem;
   letter-spacing: 0.5px;
+}
+
+.header-settings-btn {
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(236, 122, 25, 0.32);
+}
+
+.header-settings-btn:hover {
+  filter: brightness(0.95);
 }
 
 .app-header p {
@@ -90,16 +114,6 @@ body {
   border: 1px solid #303a46;
   border-radius: 999px;
   padding: 4px 10px;
-}
-
-.tiny-btn {
-  background: #202731;
-  color: #e8edf2;
-  border: 1px solid #364250;
-  border-radius: 8px;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
 }
 
 .clock-main {
@@ -148,6 +162,15 @@ body {
 .panel-head h2 {
   margin: 0;
   font-size: 1.2rem;
+}
+
+.meal-date-input {
+  border: 1px solid #b9c3bb;
+  border-radius: 10px;
+  padding: 7px 9px;
+  font: inherit;
+  color: #2a3541;
+  background: #f7faf7;
 }
 
 .action-btn {

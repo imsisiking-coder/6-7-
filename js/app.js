@@ -3,6 +3,7 @@
 
   var defaultSettings = {
     apiKey: "",
+    schoolName: "",
     officeCode: "",
     schoolCode: "",
     lunchStart: "12:30",
@@ -37,6 +38,7 @@
   var elMealCalories = document.getElementById("mealCalories");
   var elMealAllergy = document.getElementById("mealAllergy");
   var elMealStatus = document.getElementById("mealStatus");
+  var elMealDateInput = document.getElementById("mealDateInput");
 
   var elSettingsBtn = document.getElementById("settingsBtn");
   var elSettingsDialog = document.getElementById("settingsDialog");
@@ -46,6 +48,7 @@
 
   var elApiKey = document.getElementById("apiKey");
   var elCopyApiKeyBtn = document.getElementById("copyApiKeyBtn");
+  var elSchoolName = document.getElementById("schoolName");
   var elOfficeCode = document.getElementById("officeCode");
   var elSchoolCode = document.getElementById("schoolCode");
   var elLunchStart = document.getElementById("lunchStart");
@@ -59,9 +62,29 @@
 
   var extraTimerLeftSeconds = 10 * 60;
   var extraTimerId = null;
+  var selectedMealDate = new Date();
+
+  function formatInputDate(date) {
+    var y = date.getFullYear();
+    var m = String(date.getMonth() + 1).padStart(2, "0");
+    var d = String(date.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + d;
+  }
+
+  function parseInputDate(value) {
+    if (!value) return new Date();
+    var parts = value.split("-");
+    if (parts.length !== 3) return new Date();
+    var y = Number(parts[0]);
+    var m = Number(parts[1]) - 1;
+    var d = Number(parts[2]);
+    var date = new Date(y, m, d);
+    return Number.isNaN(date.getTime()) ? new Date() : date;
+  }
 
   function syncSettingsForm() {
     elApiKey.value = settings.apiKey;
+    elSchoolName.value = settings.schoolName;
     elOfficeCode.value = settings.officeCode;
     elSchoolCode.value = settings.schoolCode;
     elLunchStart.value = settings.lunchStart;
@@ -77,7 +100,7 @@
   }
 
   function renderMeal(data) {
-    elMealDate.textContent = "날짜: " + window.MealApi.ymd(new Date());
+    elMealDate.textContent = "날짜: " + window.MealApi.ymd(selectedMealDate);
     elMealList.innerHTML = "";
 
     data.items.forEach(function (item) {
@@ -98,7 +121,7 @@
 
   async function refreshMeal() {
     elMealStatus.textContent = "급식 정보를 불러오는 중...";
-    var meal = await window.MealApi.fetchTodayMeal(settings);
+    var meal = await window.MealApi.fetchTodayMeal(settings, window.MealApi.ymd(selectedMealDate));
     renderMeal(meal);
   }
 
@@ -166,15 +189,33 @@
       });
     });
 
-    elSettingsForm.addEventListener("submit", function (e) {
+    elSettingsForm.addEventListener("submit", async function (e) {
       e.preventDefault();
-      settings = {
+      var nextSettings = {
         apiKey: elApiKey.value.trim(),
+        schoolName: elSchoolName.value.trim(),
         officeCode: elOfficeCode.value.trim(),
         schoolCode: elSchoolCode.value.trim(),
         lunchStart: elLunchStart.value || "12:30",
         lunchEnd: elLunchEnd.value || "13:20"
       };
+
+      if (nextSettings.apiKey && nextSettings.schoolName) {
+        elMealStatus.textContent = "학교 정보를 조회하는 중...";
+        var schoolInfo = await window.MealApi.findSchoolByName(nextSettings.apiKey, nextSettings.schoolName);
+        if (!schoolInfo) {
+          window.alert("학교 정보를 찾지 못했습니다. 학교 이름을 다시 확인해 주세요.");
+          return;
+        }
+        nextSettings.schoolName = schoolInfo.schoolName;
+        nextSettings.officeCode = schoolInfo.officeCode;
+        nextSettings.schoolCode = schoolInfo.schoolCode;
+        elSchoolName.value = schoolInfo.schoolName;
+        elOfficeCode.value = schoolInfo.officeCode;
+        elSchoolCode.value = schoolInfo.schoolCode;
+      }
+
+      settings = nextSettings;
       saveSettings(settings);
       elSettingsDialog.close();
       renderClock();
@@ -182,6 +223,11 @@
     });
 
     elRefreshMealBtn.addEventListener("click", refreshMeal);
+
+    elMealDateInput.addEventListener("change", function () {
+      selectedMealDate = parseInputDate(elMealDateInput.value);
+      refreshMeal();
+    });
 
     elTimerMinutes.addEventListener("change", function () {
       pauseExtraTimer();
@@ -199,6 +245,7 @@
   function init() {
     syncSettingsForm();
     bindEvents();
+    elMealDateInput.value = formatInputDate(selectedMealDate);
     resetExtraTimerFromInput();
     renderClock();
     refreshMeal();

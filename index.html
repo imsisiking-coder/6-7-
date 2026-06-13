@@ -15,14 +15,16 @@
 
   <main class="app-shell">
     <header class="app-header">
-      <h1>급식 go!</h1>
+      <div class="app-header-top">
+        <h1>급식 go!</h1>
+        <button id="settingsBtn" class="header-settings-btn" type="button" aria-label="설정 열기">설정 ⚙</button>
+      </div>
       <p>점심시간을 읽는 가장 빠른 방법</p>
     </header>
 
     <section class="clock-card" aria-label="점심시간 카운트다운">
       <div class="clock-side">
         <span id="clockState">점심전</span>
-        <button id="settingsBtn" class="tiny-btn" type="button" aria-label="설정 열기">⚙</button>
       </div>
       <div class="clock-main">
         <span class="digits" id="countdown">00:00</span>
@@ -34,6 +36,7 @@
     <section class="panel" aria-label="오늘 급식">
       <div class="panel-head">
         <h2>오늘의 급식</h2>
+        <input id="mealDateInput" class="meal-date-input" type="date" aria-label="급식 날짜 선택" />
         <button id="refreshMealBtn" class="action-btn" type="button">새로고침</button>
       </div>
       <p class="panel-date" id="mealDate">날짜: -</p>
@@ -69,9 +72,12 @@
 
       <label for="apiKey">NEIS API KEY</label>
       <div class="input-copy-row">
-        <input id="apiKey" name="apiKey" type="text" placeholder="발급받은 키 입력" />
+        <input id="apiKey" name="apiKey" type="password" placeholder="발급받은 키 입력" />
         <button type="button" id="copyApiKeyBtn" class="copy-btn" title="클립보드에 복사">복사</button>
       </div>
+
+      <label for="schoolName">학교 이름</label>
+      <input id="schoolName" name="schoolName" type="text" placeholder="예: 서울고등학교" />
 
       <label for="officeCode">교육청 코드 (ATPT_OFCDC_SC_CODE)</label>
       <input id="officeCode" name="officeCode" type="text" placeholder="예: B10" />

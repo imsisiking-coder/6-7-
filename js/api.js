@@ -39,8 +39,48 @@
     return total > 0 ? total + " kcal" : "정보 없음";
   }
 
-  async function fetchTodayMeal(config) {
-    var now = new Date();
+  async function findSchoolByName(apiKey, schoolName) {
+    var trimmedName = (schoolName || "").trim();
+    if (!apiKey || !trimmedName) {
+      return null;
+    }
+
+    var url = "https://open.neis.go.kr/hub/schoolInfo"
+      + "?Type=json"
+      + "&pIndex=1&pSize=20"
+      + "&KEY=" + encodeURIComponent(apiKey)
+      + "&SCHUL_NM=" + encodeURIComponent(trimmedName);
+
+    try {
+      var response = await fetch(url);
+      if (!response.ok) {
+        return null;
+      }
+
+      var json = await response.json();
+      var hasRows = json.schoolInfo && json.schoolInfo[1] && json.schoolInfo[1].row && json.schoolInfo[1].row.length > 0;
+      if (!hasRows) {
+        return null;
+      }
+
+      var rows = json.schoolInfo[1].row;
+      var normalized = trimmedName.replace(/\s+/g, "");
+      var selected = rows.find(function (row) {
+        return String(row.SCHUL_NM || "").replace(/\s+/g, "") === normalized;
+      }) || rows[0];
+
+      return {
+        schoolName: selected.SCHUL_NM,
+        officeCode: selected.ATPT_OFCDC_SC_CODE,
+        schoolCode: selected.SD_SCHUL_CODE
+      };
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async function fetchTodayMeal(config, mealDateYmd) {
+    var targetYmd = mealDateYmd || ymd(new Date());
     if (!config.apiKey || !config.officeCode || !config.schoolCode) {
       return SAMPLE_MENU;
     }
@@ -51,7 +91,7 @@
       + "&KEY=" + encodeURIComponent(config.apiKey)
       + "&ATPT_OFCDC_SC_CODE=" + encodeURIComponent(config.officeCode)
       + "&SD_SCHUL_CODE=" + encodeURIComponent(config.schoolCode)
-      + "&MLSV_YMD=" + ymd(now);
+      + "&MLSV_YMD=" + targetYmd;
 
     try {
       var response = await fetch(url);
@@ -88,6 +128,7 @@
   }
 
   window.MealApi = {
+    findSchoolByName: findSchoolByName,
     fetchTodayMeal: fetchTodayMeal,
     ymd: ymd
   };
