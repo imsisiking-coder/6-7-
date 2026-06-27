@@ -47,7 +47,7 @@ body {
 }
 
 .app-shell {
-  max-width: 760px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 28px 16px 42px;
   display: grid;
@@ -147,7 +147,7 @@ body {
   background: rgba(255, 255, 255, 0.78);
   border: 1px solid #cfd8d1;
   border-radius: 16px;
-  padding: 16px;
+  padding: 14px;
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 24px rgba(44, 55, 68, 0.1);
 }
@@ -194,23 +194,169 @@ body {
 }
 
 .panel-date {
-  margin: 10px 0;
+  margin: 8px 0;
   color: #4d5966;
 }
 
-.meal-list {
+.meal-vote-layout {
+  display: block;
+}
+
+.meal-chart-col {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.meal-top-ranks {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px dashed #bcc6bf;
+  width: min(320px, 100%);
+  display: grid;
+  gap: 8px;
 }
 
-.meal-list li {
+.meal-top-ranks li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  font-size: 0.86rem;
+  color: #2f3d4a;
+  padding: 10px 12px;
+  border: 1px solid #d3ddd5;
+  border-radius: 10px;
+  background: #f8fbf8;
+}
+
+.rank-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: #fff;
+  background: #667789;
+}
+
+.rank-badge.first {
+  background: #ec7a19;
+}
+
+.rank-badge.second {
+  background: #1f7a8c;
+}
+
+.rank-dish {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rank-score {
+  font-weight: 700;
+  color: #445463;
+  white-space: nowrap;
+}
+
+.meal-top-empty {
+  width: min(320px, 100%);
+  margin: 0;
+  padding: 12px;
+  border: 1px dashed #c8d4cb;
+  border-radius: 10px;
+  color: #5b6876;
+  background: #fbfdfb;
+  text-align: center;
+  font-size: 0.86rem;
+}
+
+.meal-vote-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.meal-vote-item {
+  border: 1px solid #d3ddd5;
+  border-radius: 10px;
+  padding: 8px;
+  background: #f8fbf8;
+  display: grid;
+  gap: 6px;
+}
+
+.meal-vote-head {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px dashed #bcc6bf;
+  gap: 8px;
+  align-items: center;
+}
+
+.meal-name {
+  font-weight: 700;
+  color: #2a3440;
+}
+
+.meal-kcal {
+  font-size: 0.78rem;
+  color: #586676;
+}
+
+.meal-sticker-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.meal-sticker-btn {
+  border: 1px solid #c5d0c8;
+  border-radius: 999px;
+  background: #ffffff;
+  padding: 4px 8px;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  color: #2d3a46;
+}
+
+.meal-sticker-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.meal-sticker-btn.has-votes {
+  background: #eef7ef;
+  border-color: #8fbc96;
+}
+
+.meal-sticker-btn.selected {
+  background: #ec7a19;
+  color: #fff;
+  border-color: #ec7a19;
+}
+
+.meal-sticker-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
 }
 
 .meal-footer {
@@ -220,40 +366,17 @@ body {
 }
 
 .status-text {
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   color: #1f7a8c;
-  font-size: 0.9rem;
+  font-size: 0.86rem;
 }
 
-.timer-box {
-  display: grid;
-  gap: 10px;
-}
-
-#timerMinutes {
-  width: 100%;
-  border: 1px solid #b9c3bb;
-  border-radius: 10px;
-  padding: 9px;
-  font: inherit;
-}
-
-.timer-display {
-  text-align: center;
-  font-family: "DSEG7 Classic", "Courier New", monospace;
-  font-size: clamp(2rem, 8vw, 3.1rem);
-  color: #263646;
-  letter-spacing: 2px;
-  padding: 8px;
-  background: #f4f8f4;
-  border-radius: 12px;
-  border: 1px solid #d8e1d8;
-}
-
-.timer-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+.legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
 }
 
 .settings-dialog {
@@ -347,7 +470,7 @@ body {
     grid-template-areas:
       "head head"
       "clock clock"
-      "meal timer";
+      "meal votes";
     gap: 16px;
   }
 
@@ -359,16 +482,27 @@ body {
     grid-area: clock;
   }
 
-  .panel:nth-of-type(1) {
+  .meal-main-panel {
     grid-area: meal;
   }
 
-  .panel:nth-of-type(2) {
-    grid-area: timer;
+  .meal-vote-panel {
+    grid-area: votes;
   }
 
   .time-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .meal-vote-list {
+    max-height: 620px;
+  }
+}
+
+@media (max-width: 699px) {
+  .meal-top-ranks,
+  .meal-top-empty {
+    width: 100%;
   }
 }
 

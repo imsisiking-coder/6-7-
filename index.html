@@ -33,14 +33,18 @@
       <p class="queue-text">예상 급식 대기: <strong id="queueWait">0분</strong></p>
     </section>
 
-    <section class="panel" aria-label="오늘 급식">
+    <section class="panel meal-main-panel" aria-label="오늘 급식">
       <div class="panel-head">
         <h2>오늘의 급식</h2>
         <input id="mealDateInput" class="meal-date-input" type="date" aria-label="급식 날짜 선택" />
         <button id="refreshMealBtn" class="action-btn" type="button">새로고침</button>
       </div>
       <p class="panel-date" id="mealDate">날짜: -</p>
-      <ul id="mealList" class="meal-list"></ul>
+      <div class="meal-vote-layout">
+        <div class="meal-chart-col" aria-label="좋아요 랭킹">
+          <ol id="mealTopRanks" class="meal-top-ranks"></ol>
+        </div>
+      </div>
       <div class="meal-footer">
         <p>총 칼로리: <strong id="mealCalories">-</strong></p>
         <p>알레르기: <span id="mealAllergy">-</span></p>
@@ -48,27 +52,18 @@
       <p id="mealStatus" class="status-text"></p>
     </section>
 
-    <section class="panel" aria-label="부가기능 타이머">
+    <section class="panel meal-vote-panel" aria-label="급식 스티커 평가">
       <div class="panel-head">
-        <h2>부가기능 타이머</h2>
+        <h2>급식 스티커 평가</h2>
       </div>
-      <div class="timer-box">
-        <label for="timerMinutes">분 설정</label>
-        <input id="timerMinutes" type="number" min="1" max="120" value="10" />
-        <div class="timer-display" id="extraTimerDisplay">10:00</div>
-        <div class="timer-actions">
-          <button id="timerStartBtn" class="action-btn" type="button">시작</button>
-          <button id="timerPauseBtn" class="action-btn ghost" type="button">일시정지</button>
-          <button id="timerResetBtn" class="action-btn ghost" type="button">리셋</button>
-        </div>
-      </div>
+      <ul id="mealList" class="meal-vote-list"></ul>
     </section>
   </main>
 
   <dialog id="settingsDialog" class="settings-dialog">
     <form method="dialog" id="settingsForm">
       <h3>설정</h3>
-      <p class="settings-help">NEIS 정보가 없으면 샘플 급식을 표시합니다.</p>
+      <p class="settings-help">공용 설정이 있으면 자동 적용됩니다. 정보가 없으면 샘플 급식을 표시합니다.</p>
 
       <label for="apiKey">NEIS API KEY</label>
       <div class="input-copy-row">
@@ -105,6 +100,7 @@
 
   <script src="js/clock.js"></script>
   <script src="js/api.js"></script>
+  <script src="js/public-config.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
